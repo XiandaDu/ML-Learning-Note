@@ -1,19 +1,19 @@
 """Prepares the dataset for training"""
 
 import numpy as np
-from .normalize import normalize
-from .generate_sinusoids import generate_sinusoids
-from .generate_polynomials import generate_polynomials
+from utils.features.normalize import normalize
+from utils.features.generate_sinusoids import generate_sinusoids
+from utils.features.generate_polynomials import generate_polynomials
 
 
 def prepare_for_training(data, polynomial_degree=0, sinusoid_degree=0, normalize_data=True):
 
-    # 计算样本总数
+    # Calculate the number of samples (number of rows)
     num_examples = data.shape[0]
 
     data_processed = np.copy(data)
 
-    # 预处理
+    # pre-processing
     features_mean = 0
     features_deviation = 0
     data_normalized = data_processed
@@ -26,17 +26,18 @@ def prepare_for_training(data, polynomial_degree=0, sinusoid_degree=0, normalize
 
         data_processed = data_normalized
 
-    # 特征变换sinusoidal
+    # sinusoidal feature transform
     if sinusoid_degree > 0:
         sinusoids = generate_sinusoids(data_normalized, sinusoid_degree)
         data_processed = np.concatenate((data_processed, sinusoids), axis=1)
 
-    # 特征变换polynomial
+    # polynomial feature transform
     if polynomial_degree > 0:
         polynomials = generate_polynomials(data_normalized, polynomial_degree, normalize_data)
         data_processed = np.concatenate((data_processed, polynomials), axis=1)
 
-    # 加一列1
+    # add a column of 1s at the left, to make the ML program understand intercept term
+    # 1*b0 + x1*b1 +...
     data_processed = np.hstack((np.ones((num_examples, 1)), data_processed))
 
     return data_processed, features_mean, features_deviation

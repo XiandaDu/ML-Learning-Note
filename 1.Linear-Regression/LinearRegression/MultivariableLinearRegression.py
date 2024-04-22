@@ -3,9 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly
 import plotly.graph_objs as go
-
-plotly.offline.init_notebook_mode()
-from linear_regression import LinearRegression
+from linear_regression_model import LinearRegression
 
 data = pd.read_csv('../data/world-happiness-report-2017.csv')
 
@@ -15,7 +13,6 @@ test_data = data.drop(train_data.index)
 input_param_name_1 = 'Economy..GDP.per.Capita.'
 input_param_name_2 = 'Freedom'
 output_param_name = 'Happiness.Score'
-
 
 x_train = train_data[[input_param_name_1, input_param_name_2]].values
 y_train = train_data[[output_param_name]].values
@@ -40,7 +37,6 @@ plot_training_trace = go.Scatter3d(
     }
 )
 
-
 plot_test_trace = go.Scatter3d(
     x=x_test[:, 0].flatten(),
     y=x_test[:, 1].flatten(),
@@ -57,13 +53,12 @@ plot_test_trace = go.Scatter3d(
     }
 )
 
-
 plot_layout = go.Layout(
     title='Date Sets',
     scene={
         'xaxis': {'title': input_param_name_1},
         'yaxis': {'title': input_param_name_2},
-        'zaxis': {'title': output_param_name} 
+        'zaxis': {'title': output_param_name}
     },
     margin={'l': 0, 'r': 0, 'b': 0, 't': 0}
 )
@@ -74,10 +69,10 @@ plot_figure = go.Figure(data=plot_data, layout=plot_layout)
 
 plotly.offline.plot(plot_figure)
 
-num_iterations = 500  
-learning_rate = 0.01  
-polynomial_degree = 0  
-sinusoid_degree = 0  
+num_iterations = 500
+learning_rate = 0.01
+polynomial_degree = 0
+sinusoid_degree = 0
 
 linear_regression = LinearRegression(x_train, y_train, polynomial_degree, sinusoid_degree)
 
@@ -86,8 +81,8 @@ linear_regression = LinearRegression(x_train, y_train, polynomial_degree, sinuso
     num_iterations
 )
 
-print('开始损失',cost_history[0])
-print('结束损失',cost_history[-1])
+print('Loss before training', cost_history[0])
+print('Loss after training', cost_history[-1])
 
 plt.plot(range(num_iterations), cost_history)
 plt.xlabel('Iterations')
@@ -97,16 +92,14 @@ plt.show()
 
 predictions_num = 10
 
-x_min = x_train[:, 0].min();
-x_max = x_train[:, 0].max();
+x_min = x_train[:, 0].min()
+x_max = x_train[:, 0].max()
 
-y_min = x_train[:, 1].min();
-y_max = x_train[:, 1].max();
-
+y_min = x_train[:, 1].min()
+y_max = x_train[:, 1].max()
 
 x_axis = np.linspace(x_min, x_max, predictions_num)
 y_axis = np.linspace(y_min, y_max, predictions_num)
-
 
 x_predictions = np.zeros((predictions_num * predictions_num, 1))
 y_predictions = np.zeros((predictions_num * predictions_num, 1))
@@ -130,7 +123,7 @@ plot_predictions_trace = go.Scatter3d(
         'size': 1,
     },
     opacity=0.8,
-    surfaceaxis=2, 
+    surfaceaxis=2,
 )
 
 plot_data = [plot_training_trace, plot_test_trace, plot_predictions_trace]
