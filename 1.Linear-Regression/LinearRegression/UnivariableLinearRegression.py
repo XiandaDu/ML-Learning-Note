@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from linear_regression_model import LinearRegression
 
-data = pd.read_csv('../data/world-happiness-report-2017.csv')
+data = pd.read_csv('../../data/world-happiness-report-2017.csv')
 
 # Randomly choose 80% of the original data as train set and the rest as test set
 train_data = data.sample(frac=0.8)
