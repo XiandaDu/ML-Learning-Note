@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from logistic_regression import LogisticRegression
 
-data = pd.read_csv('../data/iris.csv')
+data = pd.read_csv('../../data/iris.csv')
 iris_types = ['SETOSA', 'VERSICOLOR', 'VIRGINICA']
 
 x_axis = 'petal_length'
@@ -17,6 +17,7 @@ for iris_type in iris_types:
                 )
 plt.show()
 
+# Get the input x_train and the output label y_train. y_train's length is expected to be 3.
 num_examples = data.shape[0]
 x_train = data[[x_axis, y_axis]].values.reshape((num_examples, 2))
 y_train = data['class'].values.reshape((num_examples, 1))
@@ -34,8 +35,9 @@ plt.plot(range(len(cost_histories[1])), cost_histories[1], label=labels[1])
 plt.plot(range(len(cost_histories[2])), cost_histories[2], label=labels[2])
 plt.show()
 
-y_train_prections = logistic_regression.predict(x_train)
-precision = np.sum(y_train_prections == y_train) / y_train.shape[0] * 100
+# Calculate how many y_train_predictions matches the real y_train
+y_train_predictions = logistic_regression.predict(x_train)
+precision = np.sum(y_train_predictions == y_train) / y_train.shape[0] * 100
 print('precision:', precision)
 
 x_min = np.min(x_train[:, 0])
@@ -46,6 +48,7 @@ samples = 150
 X = np.linspace(x_min, x_max, samples)
 Y = np.linspace(y_min, y_max, samples)
 
+# Draw out decision boundaries.
 Z_SETOSA = np.zeros((samples, samples))
 Z_VERSICOLOR = np.zeros((samples, samples))
 Z_VIRGINICA = np.zeros((samples, samples))

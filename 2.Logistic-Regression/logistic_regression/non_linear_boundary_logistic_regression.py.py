@@ -1,11 +1,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import math
 
 from logistic_regression import LogisticRegression
 
-data = pd.read_csv('../data/microchips-tests.csv')
+data = pd.read_csv('../../data/microchips-tests.csv')
 
 # classification label
 validities = [0, 1]
@@ -14,14 +13,14 @@ validities = [0, 1]
 x_axis = 'param_1'
 y_axis = 'param_2'
 
-
+# Scatter the distribution of samples denoted by two colors.
 for validity in validities:
     plt.scatter(
         data[x_axis][data['validity'] == validity],
         data[y_axis][data['validity'] == validity],
         label=validity
     )
-  
+
 plt.xlabel(x_axis)
 plt.ylabel(y_axis)
 plt.title('Microchips Tests')
@@ -33,7 +32,7 @@ num_examples = data.shape[0]
 x_train = data[[x_axis, y_axis]].values.reshape((num_examples, 2))
 y_train = data['validity'].values.reshape((num_examples, 1))
 
-# training meta-params
+# training hyper-params
 max_iterations = 100000  
 regularization_param = 0  
 polynomial_degree = 5  
@@ -43,11 +42,8 @@ sinusoid_degree = 0
 logistic_regression = LogisticRegression(x_train, y_train, polynomial_degree, sinusoid_degree)
 (thetas, costs) = logistic_regression.train(max_iterations)
 
-columns = []
-for theta_index in range(0, thetas.shape[1]):
-    columns.append('Theta ' + str(theta_index))
 
-# training result
+# Draw out the change of cost
 labels = logistic_regression.unique_labels
 
 plt.plot(range(len(costs[0])), costs[0], label=labels[0])
@@ -58,15 +54,14 @@ plt.ylabel('Cost')
 plt.legend()
 plt.show()
 
-# prediction
-y_train_predictions = logistic_regression.predict(x_train)
+# predict the model based on the x_train, calculate the accuracy rate.
+y_train_predictions = logistic_regression.predict(x_train)\
 
-# accuracy rate
 precision = np.sum(y_train_predictions == y_train) / y_train.shape[0] * 100
 
 print('Training Precision: {:5.4f}%'.format(precision))
 
-
+# Draw out the decision boundary (contour)
 num_examples = x_train.shape[0]
 samples = 150
 x_min = np.min(x_train[:, 0])
