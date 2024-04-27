@@ -1,7 +1,7 @@
 """Add polynomial features to the features set"""
 
 import numpy as np
-from utils.features.normalize import normalize
+from normalize import normalize
 
 
 def generate_polynomials(dataset, polynomial_degree, normalize_data=False):
